@@ -1,0 +1,245 @@
+.buttonGroup {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 95%;
+}
+
+.buttonGroup .leftButtons {
+    display: flex;
+    gap: 10px;
+}
+
+.buttonGroup button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+    background: linear-gradient(135deg, #444, #555);
+    color: #fff;
+}
+
+.buttonGroup button:hover {
+    background: linear-gradient(135deg, #555, #666);
+    transform: scale(1.05);
+}
+
+.buttonGroup .activeButton {
+    background: linear-gradient(135deg, #ff6f61, #ff3d3d);
+    transform: scale(1.05);
+}
+
+.container {
+    width: 600px;
+    height: 530px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    margin-top: 50px;
+}
+
+.listBg {
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    display: flex;
+    background: linear-gradient(135deg, #2a2a2a, #333);
+    border-radius: 5px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.songList {
+    width: 100%;
+    max-width: 600px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.songList::-webkit-scrollbar {
+    width: 5px;
+}
+
+.songList::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.songList::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.songList h1 {
+    font-size: 2.5em;
+    color: #ff6f61;
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ff6f61;
+    padding-bottom: 10px;
+}
+
+.songList ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.songList li {
+    padding: 15px;
+    margin: 10px 0;
+    background: linear-gradient(135deg, #333, #444);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.songList li:hover {
+    background: linear-gradient(135deg, #444, #555);
+    transform: scale(1.02);
+}
+
+.musicControls {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #2a2a2a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    color: #fff;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nowPlaying {
+    max-width: 400px;
+    font-size: 1em;
+    color: #ff6f61;
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+.controls button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 1em;
+    color: #fff;
+    background: linear-gradient(135deg, #ff6f61, #ff3d3d);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.controls button:hover {
+    background: linear-gradient(135deg, #ff3d3d, #ff1a1a);
+    transform: scale(1.05);
+}
+
+.controls input[type="range"] {
+    max-width: 50px;
+    margin-left: auto;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 5px;
+    background: #444;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.controls input[type="range"]:hover {
+    opacity: 1;
+}
+
+.controls input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #ff6f61;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.controls input[type="range"]::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: #ff6f61;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.refreshButton {
+    background-color: #7289da;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.refreshButton:disabled {
+    background-color: #4e5d94;
+    cursor: not-allowed;
+}
+
+.refreshIcon {
+    font-size: 1.5em;
+    transition: transform 0.3s ease-in-out;
+}
+
+.refreshIcon.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.downloadButton {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #ff6f61;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.downloadButton:hover {
+    background-color: #388e3c;
+}
