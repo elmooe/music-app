@@ -1,5 +1,9 @@
 mod db;
-use db::{ add_song, download_preset, fetch_presets, fetch_friends, fetch_samples, login_user, register_user, upload_preset, Preset, Sample };
+use db::{ add_song, download_preset, fetch_presets, 
+    fetch_friends, fetch_samples, login_user, 
+    register_user, upload_preset, remove_sample, 
+    Preset, Sample, 
+};
 use rodio::{Decoder, OutputStream, Sink};
 
 use serde::{Serialize, Deserialize};
@@ -417,6 +421,13 @@ async fn add_friend_command(
     Ok(())
 }
 
+#[tauri::command]
+async fn remove_sample_command(title: String) -> Result<(), String> {
+    remove_sample(&title)
+        .await
+        .map_err(|e| format!("Failed to remove sample: {}", e))
+}
+
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
@@ -454,6 +465,7 @@ fn main() {
             add_friend_command,
             get_cached_friends,
             remove_friend_command,
+            remove_sample_command,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

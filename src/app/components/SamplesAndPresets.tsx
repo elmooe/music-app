@@ -7,6 +7,8 @@ import styles from "./SamplesAndPresets.module.css";
 import { IoIosRefresh } from "react-icons/io";
 import { IoMdDownload } from "react-icons/io";
 import { open } from '@tauri-apps/plugin-shell';
+import { IoIosArrowDown } from "react-icons/io";
+import { IoMdClose } from "react-icons/io";
 
 interface Song {
     title: string;
@@ -20,12 +22,16 @@ interface Preset {
     uploaded_by: string;
 }
 
+type SortOption = 'name' | 'uploaded_by' | 'date';
+
 const MusicPlayer: React.FC = () => {
     const [samples, setSamples] = useState<Song[]>([]);
     const [presets, setPresets] = useState<Preset[]>([]);
     const [listType, setListType] = useState<'samples' | 'presets'>('presets');
     const [loading, setLoading] = useState<boolean>(true);
     const [refreshing, setRefreshing] = useState<boolean>(false);
+    const [sortBy, setSortBy] = useState<SortOption>('name');
+    const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
 
     useEffect(() => {
         async function loadData() {
@@ -57,6 +63,12 @@ const MusicPlayer: React.FC = () => {
 
         loadData();
     }, [listType]);
+
+    useEffect(() => {
+        invoke<string | null>('get_logged_in_user').then(user => {
+            setLoggedInUser(user);
+        });
+    }, []);
 
     const refreshSongs = async () => {
         setRefreshing(true);
@@ -140,7 +152,34 @@ const MusicPlayer: React.FC = () => {
         setListType(type);
     };
 
-    const displayedItems = listType === 'samples' ? samples : presets;
+    const getSortedItems = (items: (Song | Preset)[]) => {
+        return [...items].sort((a, b) => {
+            switch (sortBy) {
+                case 'name':
+                    return a.title.localeCompare(b.title);
+                case 'uploaded_by':
+                    return a.uploaded_by.localeCompare(b.uploaded_by);
+                case 'date':
+                    return 0;
+                default:
+                    return 0;
+            }
+        });
+    };
+
+    const displayedItems = getSortedItems(listType === 'samples' ? samples : presets);
+
+    const removeSample = async (title: string, e: React.MouseEvent) => {
+        e.stopPropagation();
+        try {
+            await invoke('remove_sample_command', { title });
+            await refreshSongs();
+            setSamples(prev => prev.filter(sample => sample.title !== title));
+            console.log(`Removed sample: ${title}`);
+        } catch (error) {
+            console.error('Failed to remove sample:', error);
+        }
+    };
 
     return (
         <div className={styles.container}>
@@ -148,14 +187,28 @@ const MusicPlayer: React.FC = () => {
                 <div className={styles.leftButtons}>
                     <button 
                         onClick={() => handleToggle('samples')} 
-                        className={listType === 'samples' ? styles.activeButton : ''}>sample URLs
+                        className={listType === 'samples' ? styles.activeButton : ''}>
+                        sample URLs
                     </button>
                     <button 
                         onClick={() => handleToggle('presets')} 
-                        className={listType === 'presets' ? styles.activeButton : ''}>Presets
+                        className={listType === 'presets' ? styles.activeButton : ''}>
+                        Presets
                     </button>
                 </div>
-                <div className={styles.rightButton}>
+                <div className={styles.rightControls}>
+                    <div className={styles.sortContainer}>
+                        <select 
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value as SortOption)}
+                            className={styles.sortSelect}
+                        >
+                            <option value="name">Sort Alphabetically</option>
+                            <option value="uploaded_by">Sort by Uploader</option>
+                            <option value="date">Sort by Date</option>
+                        </select>
+                        <IoIosArrowDown className={styles.sortIcon} />
+                    </div>
                     <button
                         onClick={handleRefresh}
                         disabled={refreshing}
@@ -163,24 +216,38 @@ const MusicPlayer: React.FC = () => {
                         <IoIosRefresh className={`${styles.refreshIcon} ${refreshing ? styles.spin : ''}`} />
                     </button>
                 </div>
-            
             </div>
             <div className={styles.listBg}>
                 <div className={styles.songList}>
                     <ul>
                     {displayedItems.map((item) => (
-                        <li key={item.title} onClick={() => playSong(item)} className={styles.songItem}>
+                        <li key={item.title} onClick={() => playSong(item as Song)} className={styles.songItem}>
                             <span className={styles.songTitle}>
                                 {item.title}
                             </span>
-                            {listType === 'presets' && (
-                                <button
-                                    onClick={() => downloadPreset(item.title)}
-                                    className={styles.downloadButton}
-                                >
-                                    <IoMdDownload />
-                                </button>
-                            )}
+                            <div className={styles.rightControls}>
+                                <span className={styles.uploadedBy}>{item.uploaded_by}</span>
+                                {listType === 'presets' ? (
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            downloadPreset(item.title);
+                                        }}
+                                        className={styles.downloadButton}
+                                    >
+                                        <IoMdDownload />
+                                    </button>
+                                ) : (
+                                    item.uploaded_by === loggedInUser && (
+                                        <button
+                                            onClick={(e) => removeSample(item.title, e)}
+                                            className={styles.deleteButton}
+                                        >
+                                            <IoMdClose />
+                                        </button>
+                                    )
+                                )}
+                            </div>
                         </li>
                     ))}
                     </ul>

@@ -315,3 +315,12 @@ pub async fn remove_friend(my_username: &str, friend_username: &str) -> Result<(
 
     Ok(())
 }
+
+pub async fn remove_sample(title: &str) -> Result<(), Box<dyn Error>> {
+    let firebase = init_firebase();
+    let sample_ref = firebase.at(&format!("songs/{}", title));
+
+    sample_ref.delete().await?;
+    println!("Sample removed from Firebase with title: {}", title);
+    Ok(())
+}
