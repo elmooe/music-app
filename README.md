@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+
+
+# Music Sharing Application
+
+This application is designed to share **Serum FXP files** and **Samples** as URL links centrally among friends. It is tailored for music creators, making it easier for them to share and collaborate on music production assets. The application also allows users to **play downloaded music files** directly through the user interface.
+
+## Key Features
+- Share **Serum FXP files** and **samples** from internet as links.
+- Built-in **audio player** for previewing music files directly within the application.
+- Centralized platform for sharing **VST presets**.
+
+## Built With
+- **Rust**: Backend development for performance and reliability.
+- **Next.js**: Frontend framework for seamless and responsive user interfaces.
+
+## Requirements
+Ensure the following tools are installed before starting:
+1. Rust and Cargo
+Install Rust using rustup:
+
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+2. Tauri CLI
+Install tauri CLI globally
+
+        cargo install tauri-cli
+
+3. Node.js and Yarn
+Install Node.js. Use the LTS version.
+Install yarn globally:
+
+        npm install -g yarn
+
+## Setting Up the Firebase Project
+This app integrates with Firebase for database functionality. Follow these steps to initialize Firebase:
+
+Set Up Firebase
+
+* Go to the Firebase Console and create a new project.
+* Enable the Realtime Database and set the rules to allow authenticated access (or as per your project needs).
+* Copy your Firebase Realtime Database URL.
+Update Firebase Configuration
+* Go to .env file
+* Replace the FIREBASE_URL constant with your Firebase Realtime Database URL:
+
+        const FIREBASE_URL: &str = "https://your-firebase-database-url.firebaseio.com/";
 
 ## Getting Started
+Follow these steps to set up and run the app:
 
-First, run the development server:
+        git clone https://github.com/elmooe/music-app.git
+        cd music-app
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Install dependencies
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+        Yarn install
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Start the app
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+        Yarn tauri dev
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Building the app
+        Yarn tauri build
